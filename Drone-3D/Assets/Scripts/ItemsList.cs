@@ -19,6 +19,8 @@ public class ItemsList : MonoBehaviour
 
         Item firstItem = GetComponentInChildren<Item>();
         Add(firstItem);
+ 
+        DroneBehaviour.DroneFailure += OnDroneCollision;      
     }
 
     public void Add(Item newItem) {
@@ -34,7 +36,19 @@ public class ItemsList : MonoBehaviour
 
     }
 
-    public void OnCollision(Item sufferedItem)
+
+    public void OnDroneCollision() {
+
+        for (int i = 0; i < _items.Count; i++)
+        {
+            _items[i].Fall();
+            _currentPosition -= _offset;
+        }
+
+        _items.Clear();
+    }
+
+    public void OnItemCollision(Item sufferedItem)
     {
         int itemIndex = _items.IndexOf(sufferedItem);
         Debug.Log("Index: " + itemIndex);

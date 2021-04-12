@@ -8,6 +8,7 @@ public class Item : MonoBehaviour
 
     public int ind = 0;
 
+
     private void OnTriggerEnter(Collider other)
     {      
         Item otherItem = null;
@@ -20,12 +21,12 @@ public class Item : MonoBehaviour
                 ItemsList.instance.Add(otherItem);          
             }
         }
-        else if (!other.CompareTag("Player") && !other.TryGetComponent<Item>(out otherItem) 
-            && (other.GetComponentInParent<Item>() == null)) {
+        else if (!other.CompareTag("Player") && other.GetComponentInParent<Item>() == null
+            && other.GetComponent<Blower>() == null) {
 
             Debug.Log("Collision: " + ind + "  " + other.name);
 
-            ItemsList.instance.OnCollision(this);
+            ItemsList.instance.OnItemCollision(this);
         }
       
     }

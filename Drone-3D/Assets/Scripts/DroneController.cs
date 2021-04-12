@@ -8,7 +8,7 @@ public class DroneController : MonoBehaviour
 
     [SerializeField] private float _forwardSpeed = 5.0f;
 
-    [SerializeField] private Rigidbody _player = null;
+    [SerializeField] private DroneBehaviour _player = null;
     [SerializeField] private float _vertHorSpeed = 10.0f;
 
     private void OnMouseDrag()
@@ -19,7 +19,7 @@ public class DroneController : MonoBehaviour
 
         if (_player != null) {            
 
-            _player.velocity = new Vector3(direction.x * _vertHorSpeed, direction.y * _vertHorSpeed, _forwardSpeed);
+            _player.Body.velocity = new Vector3(direction.x * _vertHorSpeed, direction.y * _vertHorSpeed, _player.ForwardSpeed);
         }
 
         previousPosition = currentPosition;
@@ -27,12 +27,12 @@ public class DroneController : MonoBehaviour
 
     private void OnMouseUp()
     {
-        _player.velocity = new Vector3(0.0f, 0.0f, _forwardSpeed);
+        _player.Body.velocity = new Vector3(0.0f, 0.0f, _forwardSpeed);
     }
 
     void Start()
     {
-        _player.velocity = new Vector3(0.0f, 0.0f, _forwardSpeed);
+        _player.Body.velocity = new Vector3(0.0f, 0.0f, _forwardSpeed);
     }
 
     void Update()
