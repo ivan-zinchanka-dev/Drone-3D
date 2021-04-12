@@ -34,6 +34,8 @@ public class Item : MonoBehaviour
     {
         this.GetComponent<Collider>().enabled = false;
         transform.parent = null;
+
+        this.gameObject.AddComponent<Rigidbody>();
     }
 
 }

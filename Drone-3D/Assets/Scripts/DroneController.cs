@@ -1,52 +1,39 @@
-﻿using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class DroneController : MonoBehaviour /*, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler */
+public class DroneController : MonoBehaviour
 {
-    [SerializeField] private float _forwardSpeed = 5.0f;
-    [SerializeField] private float _vertHorSpeed = 5.0f;
-
-    private Rigidbody _body;
-
     private Vector2 previousPosition = default;
 
-    //public void OnBeginDrag(PointerEventData eventData)
-    //{
-    //    Debug.Log("BEGIN!");
-    //}
+    [SerializeField] private float _forwardSpeed = 5.0f;
 
-    //public void OnDrag(PointerEventData eventData)
-    //{
-    //    Vector2 currentPosition = eventData.position;
-    //    Vector2 direction = (currentPosition - previousPosition).normalized;
+    [SerializeField] private Rigidbody _player = null;
+    [SerializeField] private float _vertHorSpeed = 10.0f;
 
-    //    _body.velocity = new Vector3(direction.x * _vertHorSpeed, direction.y * _vertHorSpeed, _forwardSpeed);
+    private void OnMouseDrag()
+    {
+        Vector2 currentPosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+        Vector2 direction = (currentPosition - previousPosition).normalized;
+  
 
-    //    previousPosition = currentPosition;
+        if (_player != null) {            
 
-    //    Debug.Log("Direction: " + direction);
-    //}
+            _player.velocity = new Vector3(direction.x * _vertHorSpeed, direction.y * _vertHorSpeed, _forwardSpeed);
+        }
 
-    //public void OnEndDrag(PointerEventData eventData)
-    //{
-    //    _body.velocity = new Vector3(0.0f, 0.0f, _forwardSpeed);
+        previousPosition = currentPosition;
+    }
 
-    //}
-
-    //public void OnPointerDown(PointerEventData eventData)
-    //{
-        
-
-    //    Debug.Log("Position: " + eventData.pressPosition);
-    //}
+    private void OnMouseUp()
+    {
+        _player.velocity = new Vector3(0.0f, 0.0f, _forwardSpeed);
+    }
 
     void Start()
     {
-        _body = GetComponent<Rigidbody>();
-        _body.velocity = new Vector3(0.0f, 0.0f, _forwardSpeed);
-
+        _player.velocity = new Vector3(0.0f, 0.0f, _forwardSpeed);
     }
-
 
     void Update()
     {
