@@ -16,8 +16,7 @@ public class Item : MonoBehaviour
         if (other.TryGetComponent<Item>(out otherItem))
         {
             if (!IsFree && otherItem.IsFree)
-            {
-                Debug.Log("Add other!");
+            {               
                 ItemsList.instance.Add(otherItem);          
             }
         }

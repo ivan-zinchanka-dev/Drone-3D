@@ -31,7 +31,7 @@ public class ItemsList : MonoBehaviour
         _currentPosition += _offset;
 
         _items.Add(newItem);
-
+        Debug.Log("Add other!");
         newItem.ind = _items.IndexOf(newItem);
 
     }

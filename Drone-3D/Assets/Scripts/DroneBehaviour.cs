@@ -1,32 +1,47 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DroneBehaviour : MonoBehaviour
 {
-    [SerializeField] public float forwardSpeed = 5.0f;
+    [SerializeField] private float _forwardSpeed = 5.0f;
     public static event Action DroneFailure = null;
 
     public float ForwardSpeed { 
         
         get { 
 
-            return forwardSpeed; 
+            return _forwardSpeed; 
         } 
         private set { 
 
-            forwardSpeed = value; 
+            _forwardSpeed = value; 
         } 
     }
     
     public Rigidbody Body { get; private set; }
 
 
-    void Start()
+    private void Awake()
     {
         Body = GetComponent<Rigidbody>();
-        Body.velocity = new Vector3(0.0f, 0.0f, forwardSpeed);
+        Body.velocity = Vector3.zero;
+    }
+
+
+    private void BeginMoveForward() {
+
+        Body.velocity = new Vector3(0.0f, 0.0f, _forwardSpeed);
+    }
+
+    void Start()
+    {
+        GameManager.OnSessionStart += BeginMoveForward;
+        GameManager.OnSessionResume += BeginMoveForward;
+
+        GameManager.OnSessionPause += delegate ()
+        {
+            Body.velocity = Vector3.zero;
+        };        
     }
 
 
@@ -34,8 +49,13 @@ public class DroneBehaviour : MonoBehaviour
     {
         Debug.Log("Collision!");
 
+        Item metObject = null;
+        
+        if ((metObject = collision.gameObject.GetComponentInParent<Item>()) != null) {
 
-        if (collision.gameObject.GetComponentInParent<Item>() != null) return;
+            if (metObject.IsFree) ItemsList.instance.Add(metObject);             
+            return;
+        }
 
         Body.constraints = RigidbodyConstraints.None;
         Body.useGravity = true;
