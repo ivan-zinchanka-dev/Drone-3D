@@ -53,7 +53,8 @@ public class DroneBehaviour : MonoBehaviour
         
         if ((metObject = collision.gameObject.GetComponentInParent<Item>()) != null) {
 
-            if (metObject.IsFree) ItemsList.instance.Add(metObject);             
+            if (metObject.IsFree) ItemsList.instance.Add(metObject);
+            BeginMoveForward();
             return;
         }
 
