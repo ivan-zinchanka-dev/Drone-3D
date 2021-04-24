@@ -5,6 +5,11 @@ public class DroneBehaviour : MonoBehaviour
 {
     [SerializeField] private float _forwardSpeed = 5.0f;
     public static event Action DroneFailure = null;
+    private ParticleSystem _explosion;
+
+    
+
+    const float _timeToDelete = 2.5f;
 
     public float ForwardSpeed { 
         
@@ -25,6 +30,8 @@ public class DroneBehaviour : MonoBehaviour
     {
         Body = GetComponent<Rigidbody>();
         Body.velocity = Vector3.zero;
+
+        _explosion = GetComponentInChildren<ParticleSystem>();
     }
 
 
@@ -41,9 +48,27 @@ public class DroneBehaviour : MonoBehaviour
         GameManager.OnSessionPause += delegate ()
         {
             Body.velocity = Vector3.zero;
-        };        
+        };
+
+        DroneFailure += Explosion;
+        DroneFailure += BeginFall;
     }
 
+    private void Explosion() {
+
+        if (_explosion != null)
+        {
+            _explosion.transform.parent = null;
+            _explosion.Play(true);
+            _explosion = null;
+        }
+    }
+
+    private void BeginFall() {
+
+        Body.constraints = RigidbodyConstraints.None;
+        Body.useGravity = true;
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -57,20 +82,15 @@ public class DroneBehaviour : MonoBehaviour
             BeginMoveForward();
             return;
         }
-
-        Body.constraints = RigidbodyConstraints.None;
-        Body.useGravity = true;
-
+        
         if (DroneFailure != null) DroneFailure();
-
-        Invoke("Explosion", 2.5f);
-
+        
+        Invoke("DeleteFromScene", _timeToDelete);
     }
 
-    void Explosion() {
+    void DeleteFromScene() {
 
-        this.gameObject.SetActive(false);
-
+        this.gameObject.SetActive(false);        
     }
 
     void Update()

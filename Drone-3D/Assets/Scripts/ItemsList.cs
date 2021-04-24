@@ -32,7 +32,7 @@ public class ItemsList : MonoBehaviour
 
         _items.Add(newItem);
         Debug.Log("Add other!");
-        newItem.ind = _items.IndexOf(newItem);
+        //newItem.ind = _items.IndexOf(newItem);
 
     }
 

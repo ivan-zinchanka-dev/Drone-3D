@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
     public static event Action OnSessionStart = null;
     public static event Action OnSessionPause = null;
     public static event Action OnSessionResume = null;
+
+    [SerializeField] private DroneController _droneController = null;
 
     [SerializeField] private GameObject[] buttons = null;
     [SerializeField] private RectTransform map = null;
@@ -70,6 +71,8 @@ public class GameManager : MonoBehaviour
     {      
         OnSessionStart += delegate ()
         {
+            if (_droneController != null) _droneController.IsLocked = false;
+
             foreach (var button in buttons)
             {
                 button.SetActive(false);
@@ -78,6 +81,8 @@ public class GameManager : MonoBehaviour
 
         OnSessionPause += delegate ()
         {
+            if (_droneController != null) _droneController.IsLocked = true;
+
             for (int i = 1; i < buttons.Length; i++) {
 
                 buttons[i].SetActive(true);
@@ -86,6 +91,8 @@ public class GameManager : MonoBehaviour
 
         OnSessionResume += delegate ()
         {
+            if (_droneController != null) _droneController.IsLocked = false;
+
             foreach (var button in buttons)
             {
                 button.SetActive(false);

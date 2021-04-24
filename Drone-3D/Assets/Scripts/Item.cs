@@ -6,7 +6,7 @@ public class Item : MonoBehaviour
 {
     public bool IsFree = true;
 
-    public int ind = 0;
+    //public int ind = 0;
 
 
     private void OnTriggerEnter(Collider other)
@@ -23,7 +23,7 @@ public class Item : MonoBehaviour
         else if (!other.CompareTag("Player") && other.GetComponentInParent<Item>() == null
             && other.GetComponent<Blower>() == null) {
 
-            Debug.Log("Collision: " + ind + "  " + other.name);
+            //Debug.Log("Collision: " + ind + "  " + other.name);
 
             ItemsList.instance.OnItemCollision(this);
         }
