@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DroneController : MonoBehaviour
@@ -20,64 +18,45 @@ public class DroneController : MonoBehaviour
         public float left;
         public float right;
         public float upper;
-        public float lower;       
+        public float lower;
     }
 
 
-    private void CorrectPosition(ref Vector3 sourcePosition, in MovingConstraints movingConstraints, float offset) {
+    private Vector3 CorrectVelocity(Vector3 sourcePosition, Vector3 sourceVelocity, in MovingConstraints movingConstraints) {
 
-        if (offset == 0.0f) throw new ArgumentOutOfRangeException("offset");
-        if (offset < 0.0f) offset = Mathf.Abs(offset);
-        
-        if (sourcePosition.x < movingConstraints.left) {
+        Vector3 correctedVelocity = sourceVelocity;
 
-            sourcePosition.x = movingConstraints.left + offset;
+        if (sourcePosition.x < movingConstraints.left && sourceVelocity.x < 0.0f ||
+            sourcePosition.x > movingConstraints.right && sourceVelocity.x > 0.0f) {
+
+            correctedVelocity.x = 0.0f;
         }
+      
+        if (sourcePosition.y < movingConstraints.lower && sourceVelocity.y < 0.0f ||
+            sourcePosition.y > movingConstraints.upper && sourceVelocity.y > 0.0f) {
 
-        if (sourcePosition.x > movingConstraints.right) {
-
-            sourcePosition.x = movingConstraints.right - offset;
-        }
-
-        if (sourcePosition.y < movingConstraints.lower) {
-
-            Debug.Log(sourcePosition.y + " " + movingConstraints.lower);
-
-            sourcePosition.y = movingConstraints.lower + offset;
+            correctedVelocity.y = 0.0f;
         } 
-        
-        if(sourcePosition.y > movingConstraints.upper) {
 
-            sourcePosition.y = movingConstraints.upper - offset;
-        }
-
+        return correctedVelocity;
     }
 
     private void OnMouseDrag()
     {
-        if (IsLocked) return;
+        if (IsLocked || _player == null) return;
 
-        Vector2 currentPosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-
-
-        Vector3 playerPos = _player.Body.position;
-        CorrectPosition(ref playerPos, in _movingConstraints, 0.25f);
-        _player.Body.position = playerPos;
-
-
-        Vector2 direction = (currentPosition - previousPosition).normalized;  
-
-        if (_player != null) {            
-           
-            _player.Body.velocity = new Vector3(direction.x * _vertHorSpeed, direction.y * _vertHorSpeed, _player.Body.velocity.z);
-        }
+        Vector2 currentPosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);      
+        Vector2 direction = (currentPosition - previousPosition).normalized;
+                
+        _player.Body.velocity = new Vector3(direction.x * _vertHorSpeed, direction.y * _vertHorSpeed, _player.Body.velocity.z);
+        _player.Body.velocity = CorrectVelocity(_player.Body.position, _player.Body.velocity, in _movingConstraints); 
 
         previousPosition = currentPosition;
     }
 
     private void OnMouseUp()
     {
-        if (IsLocked) return;
+        if (IsLocked || _player == null) return;
 
         _player.Body.velocity = new Vector3(0.0f, 0.0f, _player.Body.velocity.z);
     }
