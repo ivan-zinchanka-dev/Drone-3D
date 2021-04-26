@@ -17,7 +17,7 @@ public class Blower : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        _capturedObject.AddForce(_force, ForceMode.VelocityChange);
+        if(_capturedObject != null) _capturedObject.AddForce(_force, ForceMode.VelocityChange);
     }
 
 

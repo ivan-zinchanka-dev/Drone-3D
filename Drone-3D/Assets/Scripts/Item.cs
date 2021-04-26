@@ -21,7 +21,7 @@ public class Item : MonoBehaviour
             }
         }
         else if (!other.CompareTag("Player") && other.GetComponentInParent<Item>() == null
-            && other.GetComponent<Blower>() == null) {
+            && other.GetComponent<Blower>() == null && other.GetComponent<LandingField>() == null) {
 
             //Debug.Log("Collision: " + ind + "  " + other.name);
 

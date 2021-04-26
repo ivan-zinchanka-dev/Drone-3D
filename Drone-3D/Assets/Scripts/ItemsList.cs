@@ -64,9 +64,10 @@ public class ItemsList : MonoBehaviour
         _items.RemoveRange(itemIndex, _items.Count - itemIndex);
     }
 
+    public float GetLength() {
 
-    void Update()
-    {
-        
+        return Mathf.Abs(_currentPosition.y) + Mathf.Abs(_offset.y);    
     }
+
+
 }

@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     public static event Action OnSessionStart = null;
     public static event Action OnSessionPause = null;
     public static event Action OnSessionResume = null;
+    public static event Action OnSessionComplete = null;
+
 
     [SerializeField] private DroneController _droneController = null;
 
@@ -20,6 +22,14 @@ public class GameManager : MonoBehaviour
 
             OnSessionStart();
         }        
+    }
+
+    public static void EndGame() {
+
+        if (OnSessionComplete != null)
+        {
+            OnSessionComplete();
+        }
     }
 
     public void Pause()
@@ -98,6 +108,15 @@ public class GameManager : MonoBehaviour
                 button.SetActive(false);
             }
         };
+
+        OnSessionComplete += delegate ()
+        {
+            if(_droneController != null) _droneController.IsLocked = true;
+
+            if (pauseButton != null) pauseButton.gameObject.SetActive(false);
+
+        };
+
     }
 
 

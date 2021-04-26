@@ -17,9 +17,10 @@ public class DroneBehaviour : MonoBehaviour
 
             return _forwardSpeed; 
         } 
-        private set { 
+        set { 
 
-            _forwardSpeed = value; 
+            _forwardSpeed = value;
+            BeginMoveForward();
         } 
     }
     
@@ -39,7 +40,7 @@ public class DroneBehaviour : MonoBehaviour
 
         Body.velocity = new Vector3(0.0f, 0.0f, _forwardSpeed);
     }
-
+   
     void Start()
     {
         GameManager.OnSessionStart += BeginMoveForward;
