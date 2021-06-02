@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Blower : MonoBehaviour
 {
@@ -11,7 +9,7 @@ public class Blower : MonoBehaviour
     {
         if (other.CompareTag("Player")) {
 
-            _capturedObject = other.GetComponent<Rigidbody>(); 
+            other.TryGetComponent<Rigidbody>(out _capturedObject); 
         } 
     }
 

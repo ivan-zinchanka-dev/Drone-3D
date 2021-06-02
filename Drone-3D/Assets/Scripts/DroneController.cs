@@ -66,8 +66,4 @@ public class DroneController : MonoBehaviour
         _player.Body.velocity = new Vector3(0.0f, 0.0f, _player.Body.velocity.z);
     }
 
-    void Update()
-    {
-        
-    }
 }

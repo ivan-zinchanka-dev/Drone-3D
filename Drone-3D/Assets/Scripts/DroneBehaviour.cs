@@ -1,13 +1,12 @@
 ﻿using System;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class DroneBehaviour : MonoBehaviour
 {
     [SerializeField] private float _forwardSpeed = 5.0f;
     public static event Action DroneFailure = null;
     private ParticleSystem _explosion;
-
-    
 
     const float _timeToDelete = 2.5f;
 
@@ -35,7 +34,6 @@ public class DroneBehaviour : MonoBehaviour
         _explosion = GetComponentInChildren<ParticleSystem>();
     }
 
-
     private void BeginMoveForward() {
 
         Body.velocity = new Vector3(0.0f, 0.0f, _forwardSpeed);
@@ -53,6 +51,11 @@ public class DroneBehaviour : MonoBehaviour
 
         DroneFailure += Explosion;
         DroneFailure += BeginFall;
+
+        LevelsManager.OnReloadLevel += delegate ()
+        {
+            DroneFailure = null;
+        };
     }
 
     private void Explosion() {
@@ -69,24 +72,26 @@ public class DroneBehaviour : MonoBehaviour
 
         Body.constraints = RigidbodyConstraints.None;
         Body.useGravity = true;
-    }
+
+        LevelsManager.Instance.StartCoroutine(GameManager.StartFinalMenu(false, null));
+    }    
 
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log("Collision!");
 
-        Item metObject = null;
+        Human meetedObject = collision.gameObject.GetComponentInParent<Human>();
         
-        if ((metObject = collision.gameObject.GetComponentInParent<Item>()) != null) {
+        if (meetedObject != null) {
 
-            if (metObject.IsFree) ItemsList.instance.Add(metObject);
+            if (meetedObject.IsFree) HumanChain.instance.Add(meetedObject);
             BeginMoveForward();
             return;
         }
         
         if (DroneFailure != null) DroneFailure();
         
-        Invoke("DeleteFromScene", _timeToDelete);
+        Invoke(nameof(DeleteFromScene), _timeToDelete);
     }
 
     void DeleteFromScene() {
@@ -94,10 +99,4 @@ public class DroneBehaviour : MonoBehaviour
         this.gameObject.SetActive(false);        
     }
 
-    void Update()
-    {
-        
-        
-
-    }
 }

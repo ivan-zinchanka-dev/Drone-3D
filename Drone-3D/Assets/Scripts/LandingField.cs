@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class LandingField : MonoBehaviour
 {
@@ -13,26 +11,31 @@ public class LandingField : MonoBehaviour
     [SerializeField] private float _timeBeforeLanding = default;
 
     private float minHight = default;
-    //private float maxHight = default;
 
     private void OnTriggerEnter(Collider other)
     {
         if (_player != null) return;
 
-        if ((_player = other.GetComponent<DroneBehaviour>()) != null) {
+        if (other.TryGetComponent<DroneBehaviour>(out _player)) {
         
             _player.ForwardSpeed = 0.0f;
-            minHight = transform.position.y + transform.lossyScale.y / 2.0f + ItemsList.instance.GetLength();
-            //maxHight = 9.50f;
-            //Debug.Log("Height: " + minHight);
-            GameManager.EndGame();
+            minHight = transform.position.y + 2.0f + transform.lossyScale.y / 2.0f + HumanChain.instance.GetLength();
+            
+            Collider[] colliders = _player.GetComponents<Collider>();
+
+            foreach (var collider in colliders) {
+
+                collider.enabled = false;
+            }
+
+            GameManager.EndGame(true);
         }
     }
 
 
     private void PassengersLanding() {
-
-        ItemsList.instance.OnDroneCollision();
+         
+        HumanChain.instance.OnChainUngrouping();
     }
 
     void Update()
@@ -40,21 +43,13 @@ public class LandingField : MonoBehaviour
         if (_player == null) return;
 
         targetPosition = new Vector3(transform.position.x, minHight, transform.position.z);
-        _player.transform.position = Vector3.MoveTowards(_player.transform.position, targetPosition, _landingSpeed);
+        _player.transform.position = Vector3.MoveTowards(_player.transform.position, targetPosition, _landingSpeed * Time.deltaTime);
 
         if (_player.transform.position == targetPosition && !_passangersArrived)
         {
-            Invoke("PassengersLanding", _timeBeforeLanding);
+            Invoke(nameof(PassengersLanding), _timeBeforeLanding);
             _passangersArrived = true;
         }
-
-
-
-
-
-
-
-
 
     }
 }
