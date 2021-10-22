@@ -10,8 +10,8 @@ public class DroneMeshModel : MonoBehaviour
     private DroneSkin _currentSkinPref = null;
     private DroneSkin _currentSkinClone = null;
 
-    public const string allSkinsSerialKey = "allDroneSkins";
-    public const string currentSkinSerialKey = "currentDroneSkin";
+    public const string AllSkinsSerialKey = "allDroneSkins";
+    public const string CurrentSkinSerialKey = "currentDroneSkin";
 
     private Color _lockedSkinColor = new Color(1.0f, 1.0f, 1.0f, 0.5f);
     private Color _availableSkinColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -26,7 +26,7 @@ public class DroneMeshModel : MonoBehaviour
             _currentSkinPref = value;
             _currentSkinClone = Instantiate(_currentSkinPref, this.transform, false);
 
-            PlayerPrefs.SetInt(currentSkinSerialKey, (int)GetCurrentSkinId());
+            PlayerPrefs.SetInt(CurrentSkinSerialKey, (int)GetCurrentSkinId());
             PlayerPrefs.Save();
         } 
     }
@@ -46,17 +46,17 @@ public class DroneMeshModel : MonoBehaviour
             buf += BoolToInt(_allSkins[i].IsAvailable);
         }
 
-        PlayerPrefs.SetString(allSkinsSerialKey, buf);
+        PlayerPrefs.SetString(AllSkinsSerialKey, buf);
         PlayerPrefs.Save();
     }
 
     private void ReadSkinsFromDrive() {
 
-        string buffer = PlayerPrefs.GetString(allSkinsSerialKey, string.Empty);
+        string buffer = PlayerPrefs.GetString(AllSkinsSerialKey, string.Empty);
 
         if (buffer.Equals(string.Empty)) {
 
-            throw new KeyNotFoundException("Key " + allSkinsSerialKey + " not found.");        
+            throw new KeyNotFoundException("Key " + AllSkinsSerialKey + " not found.");        
         }
                        
         for (int i = 0; i < _allSkins.Length; i++) {
@@ -164,7 +164,7 @@ public class DroneMeshModel : MonoBehaviour
             WriteSkinsToDrive();                  
         }
 
-        ChooseSkinForId(PlayerPrefs.GetInt(currentSkinSerialKey, 0));     
+        ChooseSkinForId(PlayerPrefs.GetInt(CurrentSkinSerialKey, 0));     
     }
 
 }

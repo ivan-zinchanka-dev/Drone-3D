@@ -18,7 +18,7 @@ class Roulette : MonoBehaviour
     private void Start()
     {
         _droneMeshModel.UpdateToggles(_toggles);
-        int currentDroneSkinId = PlayerPrefs.GetInt(DroneMeshModel.currentSkinSerialKey, 0);
+        int currentDroneSkinId = PlayerPrefs.GetInt(DroneMeshModel.CurrentSkinSerialKey, 0);
         _toggles[currentDroneSkinId].isOn = true;
     }
 

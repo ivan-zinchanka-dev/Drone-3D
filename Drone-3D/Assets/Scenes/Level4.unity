@@ -13950,6 +13950,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _forwardSpeed: 11
+  _body: {fileID: 0}
 --- !u!95 &611408138
 Animator:
   serializedVersion: 3

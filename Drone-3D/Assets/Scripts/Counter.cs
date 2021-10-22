@@ -15,17 +15,6 @@ public class Counter : MonoBehaviour
             _counterView.SetText(_currentCount.ToString());
         } 
     }
-    
-    //public int GetCount()
-    //{
-    //    return _currentCount;
-    //}
-
-    //public void SetCount(int newCount) {
-
-    //    _currentCount = newCount;
-    //    _counterView.SetText(_currentCount.ToString());
-    //}
 
     public virtual void Add(int count) {
 

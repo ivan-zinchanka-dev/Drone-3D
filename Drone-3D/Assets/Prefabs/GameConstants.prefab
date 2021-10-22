@@ -3797,6 +3797,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _forwardSpeed: 8
+  _body: {fileID: 4842699417014155651}
+  _explosion: {fileID: 4842699417101386846}
 --- !u!95 &4842699417014155649
 Animator:
   serializedVersion: 3

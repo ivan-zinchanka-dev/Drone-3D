@@ -9,7 +9,10 @@ public class Follow : MonoBehaviour
     {
         if (target != null) {
 
-            this.transform.position = new Vector3(transform.position.x, transform.position.y, target.transform.position.z - offset);
+            //this.transform.position = new Vector3(transform.position.x, transform.position.y, target.transform.position.z - offset);
+
+            this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(transform.position.x, transform.position.y, target.transform.position.z - offset), 0.1f);
+
         }
     }
 }

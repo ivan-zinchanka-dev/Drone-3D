@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class DroneBehaviour : MonoBehaviour
 {
     [SerializeField] private float _forwardSpeed = 5.0f;
+    [SerializeField] private Rigidbody _body = null;
     public static event Action DroneFailure = null;
-    private ParticleSystem _explosion;
+    [SerializeField] private ParticleSystem _explosion = null;
 
     const float _timeToDelete = 2.5f;
 
@@ -23,23 +25,21 @@ public class DroneBehaviour : MonoBehaviour
         } 
     }
     
-    public Rigidbody Body { get; private set; }
+    public Rigidbody Body { get { return _body; } }
 
 
     private void Awake()
     {
-        Body = GetComponent<Rigidbody>();
         Body.velocity = Vector3.zero;
-
-        _explosion = GetComponentInChildren<ParticleSystem>();
     }
 
     private void BeginMoveForward() {
 
         Body.velocity = new Vector3(0.0f, 0.0f, _forwardSpeed);
     }
-   
-    void Start()
+
+
+    private void OnEnable()
     {
         GameManager.OnSessionStart += BeginMoveForward;
         GameManager.OnSessionResume += BeginMoveForward;
@@ -90,13 +90,22 @@ public class DroneBehaviour : MonoBehaviour
         }
         
         if (DroneFailure != null) DroneFailure();
-        
-        Invoke(nameof(DeleteFromScene), _timeToDelete);
+
+        StartCoroutine(DeleteFromScene());
+
+        //Invoke(nameof(DeleteFromScene), _timeToDelete);
     }
 
-    void DeleteFromScene() {
+    private IEnumerator DeleteFromScene() {
 
-        this.gameObject.SetActive(false);        
+        yield return new WaitForSeconds(_timeToDelete);
+
+        this.gameObject.SetActive(false);
     }
+
+    //void DeleteFromScene() {
+
+    //    this.gameObject.SetActive(false);        
+    //}
 
 }
