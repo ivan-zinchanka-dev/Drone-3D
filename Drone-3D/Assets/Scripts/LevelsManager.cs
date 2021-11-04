@@ -52,7 +52,7 @@ public class LevelsManager : MonoBehaviour
     public void ChooseLevel(int levelIndex) {
 
         OnReloadLevel?.Invoke();
-        Application.LoadLevel(levelIndex); 
+        Application.LoadLevel(levelIndex - 1); 
     }
 
 

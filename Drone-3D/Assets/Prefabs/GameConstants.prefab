@@ -3173,7 +3173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 4842699417014155648}
-  _vertHorSpeed: 8
+  _vertHorSpeed: 7
   _movingConstraints:
     left: -4.5
     right: 4.5
